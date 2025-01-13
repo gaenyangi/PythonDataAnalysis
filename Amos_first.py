@@ -49,3 +49,27 @@ plt.figure(figsize=(15, 5))
 
 plt.plot(amos_gimpo['일시'], amos_gimpo['기온(°C)'])
 plt.plot(amos_gimpo['일시'], amos_gimpo['이슬점온도(°C)'])
+
+plt.figure(figsize=(15, 5))
+plt.plot(amos_gimpo['일시'], amos_gimpo['강수량(mm)'])
+# 여름철 데이터
+amos_gimpo['일시(월)'] = amos_gimpo['일시'].dt.month
+amos_gimpo_summer = amos_gimpo[(amos_gimpo['일시(월)'] >= 6) & (amos_gimpo['일시(월)'] <= 8)]
+amos_gimpo_winter = amos_gimpo[(amos_gimpo['일시(월)'] >= 12) | (amos_gimpo['일시(월)'] <= 2)]
+
+plt.figure(figsize=(15, 5))
+plt.hist(amos_gimpo_summer['강수량(mm)'], bins=100, alpha=0.5, label='Summer', color = 'r')  
+plt.hist(amos_gimpo_winter['강수량(mm)'], bins=100, alpha=0.5, label='Winter', color = 'b')
+plt.legend()
+amos_gimpo_summer.loc[amos_gimpo_summer['강수량(mm)'] > 0]
+plt.figure(figsize=(15, 5))
+plt.hist(amos_gimpo_summer.loc[amos_gimpo_summer['강수량(mm)'] > 0]['강수량(mm)'], alpha=0.5, label='Summer', color = 'r',range=(0,30), bins=50)
+plt.hist(amos_gimpo_winter.loc[amos_gimpo_winter['강수량(mm)'] > 0]['강수량(mm)'], alpha=0.5, label='Winter', color = 'b',range=(0,30), bins=50)
+plt.legend()
+
+# 강수날짜 및 평균계산
+rainy_day_count = len(amos_gimpo.loc[amos_gimpo['강수량(mm)'] > 0])
+print(rainy_day_count)
+summer_precipitation_mean = amos_gimpo_summer['강수량(mm)'].loc[amos_gimpo_summer['강수량(mm)']>0].mean()
+print(summer_precipitation_mean)
+
